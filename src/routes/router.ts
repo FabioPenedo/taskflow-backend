@@ -10,5 +10,7 @@ router.post('/signin', UserController.authenticate)
 
 router.get('/task/list', Auth.private, UserController.listTask)
 router.post('/task/create', Auth.private, UserController.createTask)
+router.put('/task/update/:id', Auth.private, UserController.updateTask)
+router.delete('/task/delete/:id', Auth.private, UserController.deleteTask)
 
 export default router;

@@ -72,7 +72,7 @@ export const authenticate = async (req: Request, res: Response) => {
 
 export const listTask = async (req: Request, res: Response) => {
   try {
-    const tasks = userService.listTask()
+    const tasks = await userService.listTask()
     return res.status(200).json({ tasks })
   } catch (error) {
     console.error('Erro no controller:', error);
@@ -81,15 +81,15 @@ export const listTask = async (req: Request, res: Response) => {
 }
 
 export const createTask = async (req: Request, res: Response) => {
+  type bodyType = {
+    titulo: string,
+    descricao: string,
+    userId: string
+  }
+
+  const { titulo, descricao, userId }: bodyType = req.body
+
   try {
-    type bodyType = {
-      titulo: string,
-      descricao: string,
-      userId: string
-    }
-
-    const { titulo, descricao, userId }: bodyType = req.body
-
     if (!titulo || !descricao || !userId) {
       return res.status(400).json({ error: 'Título, Descricao e usuário são necessários' });
     }
@@ -108,5 +108,48 @@ export const createTask = async (req: Request, res: Response) => {
   } catch (error) {
     console.error('Erro no controller:', error);
     return res.status(500).json({ error: 'Ocorreu um erro ao tentar criar uma tarefa.' });
+  }
+}
+
+export const updateTask = async (req: Request, res: Response) => {
+  type bodyType = {
+    titulo: string,
+    descricao: string,
+  }
+  const { titulo, descricao }: bodyType = req.body
+  const taskId = req.params.id
+
+  try {
+    if (!titulo || !descricao) {
+      return res.status(400).json({ error: 'Título e descricao são necessários.' });
+    }
+
+    const updatedTask = await userService.updateTask(parseInt(taskId), {
+      title: titulo,
+      description: descricao,
+    });
+
+    return res.status(200).json(updatedTask);
+
+  } catch (error) {
+    console.error('Erro no controller:', error);
+    return res.status(500).json({ error: 'Ocorreu um erro ao tentar atualizar a tarefa.' });
+  }
+}
+
+export const deleteTask = async (req: Request, res: Response) => {
+  const taskId = req.params.id
+
+  try {
+    const deletedTask = await userService.deleteTask(parseInt(taskId));
+
+    return res.status(200).json({
+      message: 'Tarefa deletada com sucesso.',
+      task: deletedTask,
+    });
+
+  } catch (error: any) {
+    console.error('Erro no controller:', error);
+    return res.status(500).json({ error: 'Ocorreu um erro ao tentar deletar a tarefa.' });
   }
 }

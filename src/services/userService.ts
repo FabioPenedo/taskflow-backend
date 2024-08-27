@@ -62,6 +62,7 @@ export const userService = {
       throw new Error('Erro ao buscar a tarefa.');
     }
   },
+
   createTask: async (data: { title: string, description: string, userId: number }) => {
     try {
       return await prisma.task.create({
@@ -75,4 +76,38 @@ export const userService = {
       throw new Error('Erro ao criar a tarefa.');
     }
   },
+
+  findTaskById: async (data: { id: number }) => {
+    try {
+      return await prisma.task.findUnique({
+        where: { id: data.id }
+      })
+    } catch (error) {
+      throw new Error('Ocorreu um erro ao buscar a tarefa');
+    }
+  },
+
+  updateTask: async (id: number, data: { title: string, description: string }) => {
+    try {
+      return await prisma.task.update({
+        where: { id }, // Verifica a existência da tarefa pelo ID
+        data: {
+          title: data.title,
+          description: data.description,
+        },
+      });
+    } catch (error) {
+      throw new Error('Erro ao atualizar a tarefa, verifique se o id esta correto.');
+    }
+  },
+
+  deleteTask: async (id: number) => {
+    try {
+      return await prisma.task.delete({
+        where: { id }
+      });
+    } catch (error) {
+      throw new Error('Erro ao tentar deletar a tarefa.');
+    }
+  }
 }
