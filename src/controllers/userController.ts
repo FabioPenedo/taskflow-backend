@@ -112,21 +112,27 @@ export const createTask = async (req: Request, res: Response) => {
 }
 
 export const updateTask = async (req: Request, res: Response) => {
-  type bodyType = {
-    titulo: string,
-    descricao: string,
+  type BodyType = {
+    titulo?: string;
+    descricao?: string;
+    concluido?: string | boolean;
   }
-  const { titulo, descricao }: bodyType = req.body
-  const taskId = req.params.id
+
+  const { titulo, descricao, concluido }: BodyType = req.body;
+  const taskId = parseInt(req.params.id);
+
+  const concluidoBoolean: boolean = concluido === 'true' || concluido === true; // retorna o valor true ou false
 
   try {
-    if (!titulo || !descricao) {
-      return res.status(400).json({ error: 'Título e descricao são necessários.' });
+    // Verifique se ao menos um campo foi fornecido
+    if (!titulo && !descricao && concluido === undefined) {
+      return res.status(400).json({ error: 'Pelo menos um campo (título, descrição, ou concluído) deve ser fornecido.' });
     }
 
-    const updatedTask = await userService.updateTask(parseInt(taskId), {
+    const updatedTask = await userService.updateTask(taskId, {
       title: titulo,
       description: descricao,
+      completed: concluidoBoolean,
     });
 
     return res.status(200).json(updatedTask);

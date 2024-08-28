@@ -87,17 +87,18 @@ export const userService = {
     }
   },
 
-  updateTask: async (id: number, data: { title: string, description: string }) => {
+  updateTask: async (id: number, data: { title?: string; description?: string; completed?: boolean }) => {
     try {
       return await prisma.task.update({
-        where: { id }, // Verifica a existência da tarefa pelo ID
+        where: { id },
         data: {
           title: data.title,
           description: data.description,
+          completed: data.completed, // Campo opcional
         },
       });
     } catch (error) {
-      throw new Error('Erro ao atualizar a tarefa, verifique se o id esta correto.');
+      throw new Error('Erro ao atualizar a tarefa.');
     }
   },
 
