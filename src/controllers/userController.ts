@@ -58,7 +58,7 @@ export const authenticate = async (req: Request, res: Response) => {
     if (user && await comparePassword(senha, user.password)) {
       const token = userService.generateToken(user.id, user.email);
       return res.status(200).json({
-        id: user.email,
+        id: user.id,
         token: token,
       });
     }
