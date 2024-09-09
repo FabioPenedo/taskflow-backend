@@ -1,6 +1,6 @@
 # Front-end
 ```bash
-https://github.com/FabioPenedo/taskflow-backend
+https://github.com/FabioPenedo/taskflow-frontend
 ```
 
 ##  Tecnologias
