@@ -9,6 +9,7 @@ router.post('/signup', UserController.create);
 router.post('/signin', UserController.authenticate)
 
 router.get('/task/list', Auth.private, UserController.listTask)
+router.get('/task/list/:id', Auth.private, UserController.listTaskId)
 router.post('/task/create', Auth.private, UserController.createTask)
 router.put('/task/update/:id', Auth.private, UserController.updateTask)
 router.delete('/task/delete/:id', Auth.private, UserController.deleteTask)

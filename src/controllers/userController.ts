@@ -80,6 +80,23 @@ export const listTask = async (req: Request, res: Response) => {
   }
 }
 
+export const listTaskId = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id);
+  try {
+    const tasks = await userService.listTaskId(id)
+
+    if (!tasks) {
+      return res.status(200).json({ tasks: "Tarefa não encontrada" })
+    }
+
+    return res.status(200).json({ tasks })
+
+  } catch (error) {
+    console.error('Erro no controller:', error);
+    return res.status(500).json({ error: 'Ocorreu um erro ao listar.' });
+  }
+}
+
 export const createTask = async (req: Request, res: Response) => {
   type bodyType = {
     titulo: string,

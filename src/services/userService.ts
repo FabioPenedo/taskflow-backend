@@ -48,6 +48,18 @@ export const userService = {
     }
   },
 
+  listTaskId: async (id: number) => {
+    try {
+      return await prisma.task.findUnique({
+        where: {
+          id: id,
+        },
+      });
+    } catch (error) {
+      throw new Error('Ocorreu um erro ao tentar listar a tarefa.');
+    }
+  },
+
   findByTitle: async (title: string, userId: number) => {
     try {
       return await prisma.task.findUnique({
